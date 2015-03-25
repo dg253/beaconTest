@@ -4,6 +4,42 @@ angular.module('starter.controllers', ['starter.services'])
   // Form data for the login modal
   $scope.loginData = {};
 
+  // Create the beacon options modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/browse.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal1 = modal;
+  });
+
+  // Triggered in the beacon options modal to close it
+  $scope.closeBeaconOptions = function() {
+    $scope.modal1.hide();
+  };
+
+  // Open the beacon options modal
+  $scope.beaconOptions = function() {
+    $scope.modal1.show();
+  };
+
+  $timeout(function() {
+      $scope1.closeBeaconOptions();
+    }, 10);
+  
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal1.remove();
+  });
+  // Execute action on hide modal
+  $scope.$on('modal1.hidden', function() {
+    // Execute action
+  });
+  // Execute action on remove modal
+  $scope.$on('modal1.removed', function() {
+    // Execute action
+  });
+
+
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
@@ -20,6 +56,11 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.login = function() {
     $scope.modal.show();
   };
+
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {

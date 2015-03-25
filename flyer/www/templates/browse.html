@@ -1,5 +1,23 @@
-<ion-view view-title="Browse">
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Beacon Options</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeBeaconOptions()">Close</button>
+    </div>
+  </ion-header-bar>
   <ion-content>
-    <h1>Browse</h1>
+	<div class="list card">
+
+	  <a href="#/app/search" class="item item-icon-left">
+	    <i class="icon ion-edit"></i>
+	    Create a Beacon
+	  </a>
+
+	  <a href="#" class="item item-icon-left">
+	    <i class="icon ion-location"></i>
+	    Join a Beacon
+	  </a>
+
+	</div>
   </ion-content>
-</ion-view>
+</ion-modal-view>
