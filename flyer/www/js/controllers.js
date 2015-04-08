@@ -22,9 +22,9 @@ angular.module('starter.controllers', ['starter.services'])
     $scope.modal1.show();
   };
 
-  $timeout(function() {
-      $scope1.closeBeaconOptions();
-    }, 10);
+  $scope.postCreate = function() {
+    $scope.closeBeaconOptions();
+  };
   
   //Cleanup the modal when we're done with it!
   $scope.$on('$destroy', function() {
@@ -108,4 +108,4 @@ angular.module('starter.controllers', ['starter.services'])
             alert('Facebook error: ' + error.error_description);
         }
     });
-});
+})
