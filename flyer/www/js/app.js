@@ -60,6 +60,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   })
 
+  .state('app.local', {
+    url: "/local",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/local.html",
+        controller: 'LocalCtrl'
+      }
+    }
+  })
+  
   .state('app.flyers', {
     url: "/flyers",
     views: {
