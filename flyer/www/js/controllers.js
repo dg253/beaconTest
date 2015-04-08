@@ -95,6 +95,44 @@ angular.module('starter.controllers', ['starter.services'])
     $scope.flyer = Flyer.get({flyerId: $stateParams.flyerId});
 })
 
+.controller('LocalCtrl', function($scope) {
+  $scope.hasPermission = function() {
+    cordova.plugins.notification.local.hasPermission(function (granted) {
+      alert('Permission has been granted: ' + granted);
+    });
+  };
+
+  $scope.grantPermission = function() {
+    cordova.plugins.notification.local.registerPermission(function (granted) {
+      alert('Permission has been granted: ' + granted);
+    });
+  };
+
+  $scope.schedule = function () {
+    cordova.plugins.notification.local.schedule({
+      id: 1,
+      text: 'Test Message 1',
+      icon: 'http://www.optimizeordie.de/wp-content/plugins/social-media-widget/images/default/64/googleplus.png',
+      sound: null,
+      data: { test: id }
+    });
+  };
+
+  $scope.scheduleDelayed = function () {
+    var now = new Date().getTime(),
+    _5_sec_from_now = new Date(now + 5 * 1000);
+    var sound = device.platform == 'Android' ? 'file://sound.mp3' : 'file://beep.caf';
+    cordova.plugins.notification.local.schedule({
+      id: 2,
+      title: 'Scheduled with delay',
+      text: 'Test Message 1',
+      at: _5_sec_from_now,
+      sound: sound,
+      badge: 12
+    });
+  };
+})
+
 .controller('ProfileCtrl', function($scope) {
     openFB.api({
         path: '/me',
