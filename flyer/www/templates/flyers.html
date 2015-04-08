@@ -4,14 +4,14 @@
 </div>
   </ion-nav-buttons>
   <ion-nav-buttons side="right">
-      <button class="button button-icon icon ion-plus" ng-click="beaconOptions()"></button>
+      <button menu-toggle="right"class="button button-icon icon ion-plus"></button>
 </div>
   </ion-nav-buttons>
+  
   <ion-content class="has-header">
-
     <div class="list">
 
-    <a  ng-repeat="flyer in flyers" class="item item-thumbnail-left" href="#/app/flyers/{{flyer.id}}" >
+    <a ng-repeat="flyer in flyers" class="item item-thumbnail-left" href="#/app/flyers/{{flyer.id}}" >
       <img ng-src="{{flyer.img}}">
       <h2>{{flyer.title}}</h2>
       <p>By: {{flyer.speaker}}</p>
