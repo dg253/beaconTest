@@ -17,6 +17,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    
+    cordova.plugins.Keyboard.disableScroll(true)
   });
 })
 
@@ -69,7 +71,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     }
   })
-  
+
   .state('app.flyers', {
     url: "/flyers",
     views: {
