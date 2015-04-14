@@ -25,7 +25,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.postCreate = function() {
     $scope.closeBeaconOptions();
   };
-  
+
   //Cleanup the modal when we're done with it!
   $scope.$on('$destroy', function() {
     $scope.modal1.remove();
@@ -111,8 +111,8 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.schedule = function () {
     cordova.plugins.notification.local.schedule({
       id: 1,
-      text: 'Test Message 1',
-      icon: 'http://www.optimizeordie.de/wp-content/plugins/social-media-widget/images/default/64/googleplus.png',
+      title: 'Regular Local Schedule'
+      text: 'Test Message 2',
       sound: null,
       data: { test: id }
     });
