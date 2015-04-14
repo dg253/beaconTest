@@ -39,7 +39,6 @@ angular.module('starter.controllers', ['starter.services'])
     // Execute action
   });
 
-
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
@@ -89,6 +88,22 @@ angular.module('starter.controllers', ['starter.services'])
 
 .controller('FlyersCtrl', function($scope, Flyer) {
     $scope.flyers = Flyer.query();
+
+    /* $scope.flyers = [];
+
+    $scope.$on('add', function(event, todo) {
+        $scope.flyers.push(todo);
+    });
+
+    $scope.$on('delete', function(event, id) {
+        for(var i = 0; i < $scope.flyers.length; i++) {
+            if($flyers.todos[i]._id === id) {
+                $flyers.todos.splice(i, 1);
+            }
+        }
+    });
+    */
+
 })
 
 .controller('FlyerCtrl', function($scope, $stateParams, Flyer) {
@@ -111,7 +126,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.schedule = function () {
     cordova.plugins.notification.local.schedule({
       id: 1,
-      title: 'Regular Local Schedule'
+      title: 'Regular Local Schedule',
       text: 'Test Message 2',
       sound: null,
       data: { test: id }
