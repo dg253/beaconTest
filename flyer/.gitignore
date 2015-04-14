@@ -8,3 +8,4 @@ plugins/android
 plugins/firefoxos
 resources/
 ../server/node_modules
+../resources
