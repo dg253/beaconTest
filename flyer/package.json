@@ -13,5 +13,21 @@
     "bower": "^1.4.0",
     "gulp-util": "^3.0.4",
     "shelljs": "^0.4.0"
-  }
+  },
+  "cordovaPlugins": [
+    "org.apache.cordova.inappbrowser",
+    "org.apache.cordova.device",
+    "org.apache.cordova.console",
+    "org.apache.cordova.statusbar",
+    "de.appplant.cordova.plugin.local-notification",
+    "com.ionic.keyboard"
+  ],
+  "cordovaPlatforms": [
+    "ios",
+    {
+      "platform": "android",
+      "locator": "firefoxos"
+    },
+    "android"
+  ]
 }
