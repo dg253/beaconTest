@@ -6,6 +6,5 @@ platforms/
 plugins/ios
 plugins/android
 plugins/firefoxos
-resources/
 ../server/node_modules
 ../resources
