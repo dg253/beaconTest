@@ -4,6 +4,8 @@ angular.module('starter.controllers', ['starter.services'])
   // Form data for the login modal
   $scope.loginData = {};
 
+  $scope.beaconForm = {};
+
   // Create the beacon options modal that we will use later
   $ionicModal.fromTemplateUrl('templates/browse.html', {
     scope: $scope,
@@ -23,7 +25,19 @@ angular.module('starter.controllers', ['starter.services'])
   };
 
   $scope.postCreate = function() {
-    $scope.closeBeaconOptions();
+    console.log($scope.beaconForm);
+    localDB.post({
+      title: $scope.beaconForm.title,
+      owner: $scope.beaconForm.owner,
+      dateAdded: $scope.beaconForm.dateAdded,
+      description: $scope.beaconForm.description,
+      location: $scope.beaconForm.location,
+      image: $scope.beaconForm.imageURL,
+      brand: $scope.beaconForm.brand,
+      oPrice: $scope.beaconForm.oPrice,
+      dPrice: $scope.beaconForm.dPrice
+    });
+    console.log('complete adding');
   };
 
   //Cleanup the modal when we're done with it!
@@ -86,10 +100,10 @@ angular.module('starter.controllers', ['starter.services'])
   };
 })
 
-.controller('FlyersCtrl', function($scope, Flyer) {
-    $scope.flyers = Flyer.query();
+.controller('FlyersCtrl', function($scope, Flyer, PouchDBListener) {
+    //$scope.flyers = Flyer.query();
 
-    /* $scope.flyers = [];
+    $scope.flyers = [];
 
     $scope.$on('add', function(event, todo) {
         $scope.flyers.push(todo);
@@ -102,8 +116,6 @@ angular.module('starter.controllers', ['starter.services'])
             }
         }
     });
-    */
-
 })
 
 .controller('FlyerCtrl', function($scope, $stateParams, Flyer) {
