@@ -38,6 +38,7 @@ angular.module('starter.controllers', ['starter.services'])
       dPrice: $scope.beaconForm.dPrice
     });
     console.log('complete adding');
+    $scope.closeBeaconOptions();
   };
 
   //Cleanup the modal when we're done with it!
