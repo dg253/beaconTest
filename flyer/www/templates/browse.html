@@ -11,31 +11,31 @@
     <div class="list list-inset">
       <label class="item item-input">
         <span class="input-label">Title</span>
-        <input type="text" placeholder="Title">
+        <input type="text" ng-model="beacon.title" placeholder="Title">
       </label>
       <label class="item item-input item-label">
         <span class="input-label">On</span>
-        <input type="date">
+        <input type="date" ng-model="beacon.date">
       </label>
       <label class="item item-input item-label">
         <span class="input-label">Description</span>
-        <input type="text" placeholder="Description">
+        <input type="text" ng-model="beacon.description" placeholder="Description">
       </label>
       <label class="item item-input item-label">
         <span class="input-label">Location</span>
-        <input type="text" placeholder="Location">
+        <input type="text"  ng-model="beacon.location" placeholder="Location">
       </label>
       <label class="item item-input item-select">
         <div class="input-label">Brand
         </div>
-        <select>
+        <select ng-model="beacon.brand">
           <option>Rad Beacon</option>
           <option selected>Estimote</option>
           <option>Other</option>
         </select>
       </label>
       <br>
-      <button class="button button-block button-balanced" ng-click="postCreate()">
+      <button class="button button-block button-balanced" ng-submit="postCreate()">
         Create
       </button>
     </div>
