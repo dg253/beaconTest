@@ -11,6 +11,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.loginData = {};
 
   $scope.beaconForm = {};
+  $scope.beaconForm.dateAdded = new Date();
 
   // Create the beacon options modal that we will use later
   $ionicModal.fromTemplateUrl('templates/browse.html', {
