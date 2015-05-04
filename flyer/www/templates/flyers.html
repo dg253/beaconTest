@@ -7,8 +7,9 @@
       <button menu-toggle="right"class="button button-icon icon ion-plus"></button>
 </div>
   </ion-nav-buttons>
-  
+
   <ion-content class="has-header">
+    <!--
     <div class="list">
 
     <a ng-repeat="flyer in flyers" class="item item-thumbnail-left" href="#/app/flyers/{{flyer.id}}" >
@@ -18,6 +19,27 @@
     </a>
 
     </div>
+    -->
+    <ion-list
+      show-delete="shouldShowDelete"
+      show-reorder="shouldShowReorder"
+      can-swipe="listCanSwipe"
+    >
+      <ion-item ng-repeat="flyer in flyers"
+                class="item item-thumbnail-left"
+                href="#/app/flyers/{{flyer.id}}"
+      >
+        <img ng-src="{{flyer.img}}">
+        <h2>{{flyer.title}}</h2>
+        <p>{{flyer.speaker}}</p>
+        <ion-option-button class="button-assertive" ng-click="delete(flyer)">
+        Delete
+        </ion-option-button>
+        <ion-reorder-button class="ion-navicon"
+                            on-reorder="reorderItem(flyer, $fromIndex, $toIndex)">
+        </ion-reorder-button>
 
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>

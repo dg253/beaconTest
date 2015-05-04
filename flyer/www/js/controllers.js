@@ -1,8 +1,17 @@
 angular.module('starter.controllers', ['starter.services'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+  localDB.sync(remoteDB, {live: true})
+    .on('error', function (err) {
+        console.log("Syncing stopped");
+        console.log(err);
+      });
+
   // Form data for the login modal
   $scope.loginData = {};
+
+  $scope.beaconForm = {};
+  $scope.beaconForm.dateAdded = new Date();
 
   // Create the beacon options modal that we will use later
   $ionicModal.fromTemplateUrl('templates/browse.html', {
@@ -23,6 +32,19 @@ angular.module('starter.controllers', ['starter.services'])
   };
 
   $scope.postCreate = function() {
+    console.log($scope.beaconForm);
+    localDB.post({
+      title: $scope.beaconForm.title,
+      owner: $scope.beaconForm.owner,
+      dateAdded: $scope.beaconForm.dateAdded,
+      description: $scope.beaconForm.description,
+      location: $scope.beaconForm.location,
+      image: $scope.beaconForm.imageURL,
+      brand: $scope.beaconForm.brand,
+      oPrice: $scope.beaconForm.oPrice,
+      dPrice: $scope.beaconForm.dPrice
+    });
+    console.log('complete adding');
     $scope.closeBeaconOptions();
   };
 
@@ -38,7 +60,6 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.$on('modal1.removed', function() {
     // Execute action
   });
-
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -87,8 +108,37 @@ angular.module('starter.controllers', ['starter.services'])
   };
 })
 
-.controller('FlyersCtrl', function($scope, Flyer) {
-    $scope.flyers = Flyer.query();
+.controller('FlyersCtrl', function($scope, Flyer, PouchDBListener) {
+    //$scope.flyers = Flyer.query();
+    $scope.$root.enableRight = false;
+
+    $scope.$on('$stateChangeStart', function() {
+        $scope.$root.enableRight = true;
+    });
+
+    $scope.shouldShowDelete = false;
+    $scope.shouldShowReorder = false;
+    $scope.listCanSwipe = true;
+
+    $scope.flyers = [];
+
+    $scope.$on('add', function(event, todo) {
+        $scope.flyers.push(todo);
+    });
+
+    $scope.$on('delete', function(event, id) {
+        for(var i = 0; i < $scope.flyers.length; i++) {
+            if($scope.flyers[i]._id === id) {
+                $scope.flyers.splice(i, 1);
+            }
+        }
+    });
+
+    $scope.delete = function(task) {
+      localDB.get(task._id, function (err, doc) {
+        localDB.remove(doc, function (err, res) {});
+      });
+    };
 })
 
 .controller('FlyerCtrl', function($scope, $stateParams, Flyer) {
@@ -111,7 +161,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.schedule = function () {
     cordova.plugins.notification.local.schedule({
       id: 1,
-      title: 'Regular Local Schedule'
+      title: 'Regular Local Schedule',
       text: 'Test Message 2',
       sound: null,
       data: { test: id }

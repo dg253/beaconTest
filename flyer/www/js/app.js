@@ -4,6 +4,10 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
+
+var localDB = new PouchDB('beacons');
+var remoteDB = new PouchDB('http://54.149.42.95:5984/beacons');
+
 angular.module('starter', ['ionic', 'starter.controllers'])
 
 .run(function($ionicPlatform) {
@@ -18,10 +22,35 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       StatusBar.styleDefault();
     }
 
-    cordova.plugins.Keyboard.disableScroll(true)
-
+    cordova.plugins.Keyboard.disableScroll(true);
   });
 })
+
+.factory('PouchDBListener', ['$rootScope', function($rootScope) {
+  localDB.changes({
+        live: true,
+        continuous: true,
+        onChange: function(change) {
+            if (!change.deleted) {
+                $rootScope.$apply(function() {
+                    localDB.get(change.id, function(err, doc) {
+                        $rootScope.$apply(function() {
+                            if (err) console.log(err);
+                            $rootScope.$broadcast('add', doc);
+                        })
+                    });
+                })
+            } else {
+                $rootScope.$apply(function() {
+                    $rootScope.$broadcast('delete', change.id);
+                });
+            }
+        }
+    });
+
+    return true;
+
+}])
 
 .config(function($stateProvider, $urlRouterProvider) {
   openFB.init({appId: '1630742683822336'});
