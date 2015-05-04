@@ -10,7 +10,7 @@
       </ion-nav-buttons>
 
       <ion-nav-buttons side="right">
-        <button menu-toggle="right"class="button button-icon icon ion-plus">
+        <button class="button button-icon icon ion-plus" menu-toggle="right" >
         </button>
       </ion-nav-buttons>
 
@@ -41,18 +41,21 @@
   </ion-side-menu>
 
   <ion-side-menu side="right">
-    <ion-header-bar class="bar-calm">
-      <h1 class="title">Beacons</h1>
-    </ion-header-bar>
-    <ion-content>
-      <ion-list>
-        <ion-item class="item-icon-left" nav-clear menu-close ng-click="beaconOptions()">
-          <i class="icon ion-plus-round"></i>Add A Beacon
-        </ion-item>
-        <ion-item class="item-icon-left" nav-clear menu-close ng-click="#">
-          <i class="icon ion-location"></i>Join A Beacon
-        </ion-item>
-      </ion-list>
-    </ion-content>
+    <ion-pane side-menu-content drag-content="false">
+      <ion-header-bar class="bar-calm">
+        <h1 class="title">Beacons</h1>
+      </ion-header-bar>
+
+      <ion-content>
+        <ion-list>
+          <ion-item class="item-icon-left" nav-clear menu-close ng-click="beaconOptions()">
+            <i class="icon ion-plus-round"></i>Add A Beacon
+          </ion-item>
+          <ion-item class="item-icon-left" nav-clear menu-close ng-click="#">
+            <i class="icon ion-location"></i>Join A Beacon
+          </ion-item>
+        </ion-list>
+      </ion-content>
+  </ion-pane>
   </ion-side-menu>
 </ion-side-menus>
