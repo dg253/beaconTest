@@ -5,8 +5,8 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
-var localDB = new PouchDB("beacons");
-var remoteDB = new PouchDB("http://54.149.42.95:5984/beacons");
+var localDB = new PouchDB('beacons');
+var remoteDB = new PouchDB('http://54.149.42.95:5984/beacons');
 
 angular.module('starter', ['ionic', 'starter.controllers'])
 
@@ -24,14 +24,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
     cordova.plugins.Keyboard.disableScroll(true);
 
-    localDB.sync(remoteDB, {live: true});
-    remoteDB.sync(localDB, {live: true});
-
+    localDB.sync(remoteDB, {live: true})
+      .on('error', function (err) {
+          console.log("Syncing stopped");
+          console.log(err);
+        });
   });
 })
 
 .factory('PouchDBListener', ['$rootScope', function($rootScope) {
-    localDB.changes({
+  localDB.changes({
+        live: true,
         continuous: true,
         onChange: function(change) {
             if (!change.deleted) {
