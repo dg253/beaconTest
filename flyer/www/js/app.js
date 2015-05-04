@@ -23,12 +23,6 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
 
     cordova.plugins.Keyboard.disableScroll(true);
-
-    localDB.sync(remoteDB, {live: true})
-      .on('error', function (err) {
-          console.log("Syncing stopped");
-          console.log(err);
-        });
   });
 })
 
