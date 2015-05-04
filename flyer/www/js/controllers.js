@@ -108,8 +108,7 @@ angular.module('starter.controllers', ['starter.services'])
   };
 })
 
-.controller('FlyersCtrl', function($scope, Flyer, PouchDBListener) {
-    //$scope.flyers = Flyer.query();
+.controller('FlyersCtrl', function($scope, FlyerService, PouchDBListener) {
     $scope.$root.enableRight = false;
 
     $scope.$on('$stateChangeStart', function() {
@@ -120,18 +119,16 @@ angular.module('starter.controllers', ['starter.services'])
     $scope.shouldShowReorder = false;
     $scope.listCanSwipe = true;
 
-    $scope.flyers = [];
+    $scope.flyers = FlyerService.getFlyers();
 
-    $scope.$on('add', function(event, todo) {
-        $scope.flyers.push(todo);
+    $scope.$on('add', function(event, flyer) {
+      FlyerService.addFlyer(flyer);
+      //$scope.flyers = Flyer.getFlyers();
     });
 
     $scope.$on('delete', function(event, id) {
-        for(var i = 0; i < $scope.flyers.length; i++) {
-            if($scope.flyers[i]._id === id) {
-                $scope.flyers.splice(i, 1);
-            }
-        }
+      FlyerService.deleteFlyer(id);
+      //$scope.flyers = Flyer.getFlyers();
     });
 
     $scope.delete = function(task) {
@@ -141,8 +138,9 @@ angular.module('starter.controllers', ['starter.services'])
     };
 })
 
-.controller('FlyerCtrl', function($scope, $stateParams, Flyer) {
-    $scope.flyer = Flyer.get({flyerId: $stateParams.flyerId});
+.controller('FlyerCtrl', function($scope, $stateParams, FlyerService) {
+    $scope.flyer = FlyerService.getFlyer($stateParams.flyerId)
+    //$scope.flyer = Flyer.get({flyerId: $stateParams.flyerId});
 })
 
 .controller('LocalCtrl', function($scope) {
