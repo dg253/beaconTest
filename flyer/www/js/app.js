@@ -21,7 +21,6 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-
     cordova.plugins.Keyboard.disableScroll(true);
   });
 })
@@ -36,27 +35,25 @@ angular.module('starter', ['ionic', 'starter.controllers'])
                     localDB.get(change.id, function(err, doc) {
                         $rootScope.$apply(function() {
                             if (err) console.log(err);
+                            console.log('ADD has been broadcasted')
                             $rootScope.$broadcast('add', doc);
                         })
                     });
                 })
             } else {
                 $rootScope.$apply(function() {
+                    console.log('DELETE has been broadcasted')
                     $rootScope.$broadcast('delete', change.id);
                 });
             }
         }
     });
-
     return true;
-
 }])
 
 .config(function($stateProvider, $urlRouterProvider) {
   openFB.init({appId: '1630742683822336'});
-
   $stateProvider
-
   .state('app', {
     url: "/app",
     abstract: true,
