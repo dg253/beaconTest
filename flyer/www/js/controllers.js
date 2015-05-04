@@ -1,6 +1,12 @@
 angular.module('starter.controllers', ['starter.services'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+  localDB.sync(remoteDB, {live: true})
+    .on('error', function (err) {
+        console.log("Syncing stopped");
+        console.log(err);
+      });
+
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -103,6 +109,15 @@ angular.module('starter.controllers', ['starter.services'])
 
 .controller('FlyersCtrl', function($scope, Flyer, PouchDBListener) {
     //$scope.flyers = Flyer.query();
+    $scope.$root.enableRight = false;
+
+    $scope.$on('$stateChangeStart', function() {
+        $scope.$root.enableRight = true;
+    });
+
+    $scope.shouldShowDelete = false;
+    $scope.shouldShowReorder = false;
+    $scope.listCanSwipe = true;
 
     $scope.flyers = [];
 
@@ -112,11 +127,17 @@ angular.module('starter.controllers', ['starter.services'])
 
     $scope.$on('delete', function(event, id) {
         for(var i = 0; i < $scope.flyers.length; i++) {
-            if($flyers.todos[i]._id === id) {
-                $flyers.todos.splice(i, 1);
+            if($scope.flyers[i]._id === id) {
+                $scope.flyers.splice(i, 1);
             }
         }
     });
+
+    $scope.delete = function(task) {
+      localDB.get(task._id, function (err, doc) {
+        localDB.remove(doc, function (err, res) {});
+      });
+    };
 })
 
 .controller('FlyerCtrl', function($scope, $stateParams, Flyer) {
