@@ -15,27 +15,27 @@
       </label>
       <label class="item item-input">
         <span class="input-label">Owner</span>
-        <input type="text" ng-model="beaconForm.Owner" placeholder="Owner">
+        <input type="text" ng-model="beaconForm.owner" placeholder="Owner">
       </label>
       <label class="item item-input">
         <span class="input-label">UUID</span>
-        <input type="text" ng-model="beaconForm.UUID" placeholder="UUID">
+        <input type="number" ng-model="beaconForm.uuid" placeholder="UUID">
       </label>
       <label class="item item-input">
         <span class="input-label">Major</span>
-        <input type="text" ng-model="beaconForm.Major" placeholder="Major">
+        <input type="number" ng-model="beaconForm.major" placeholder="Major">
       </label>
       <label class="item item-input">
         <span class="input-label">Minor</span>
-        <input type="text" ng-model="beaconForm.Minor" placeholder="Minor">
+        <input type="number" ng-model="beaconForm.minor" placeholder="Minor">
       </label>
 
       <input type="hidden" ng-model="beaconForm.dateAdded">
-
       <label class="item item-input item-label">
         <span class="input-label">Description</span>
-        <input type="text" ng-model="beaconForm.description" placeholder="Description">
+        <textarea rows="3" ng-model="beaconForm.description" placeholder="Description"></textarea>
       </label>
+
       <label class="item item-input item-label">
         <span class="input-label">Location</span>
         <input type="text"  ng-model="beaconForm.location" placeholder="Location">
