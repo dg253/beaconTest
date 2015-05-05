@@ -8,7 +8,7 @@
 var localDB = new PouchDB('beacons');
 var remoteDB = new PouchDB('http://54.149.42.95:5984/beacons');
 
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('starter', ['ionic', 'starter.controllers','starter.beacons'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -71,6 +71,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         templateUrl: "templates/search.html"
       }
     }
+  })
+
+  .state('app.addBeacon', {
+  	url: "/addBeacon",
+  	views: {
+  		'menuContent': {
+  			templateUrl: "templates/beaconScan.html",
+  			controller: 'BeaconCtrl'
+  		}
+  	}
   })
 
   .state('app.browse', {
