@@ -7,13 +7,19 @@
         <div class="list card">
 
           <div class="item item-avatar">
-            <img src="{{flyer.userPicture}}">
+            <img src="{{flyer.img}}">
             <h2>{{flyer.title}}</h2>
-            <p>By: {{flyer.speaker}}</p>
+            <p>By: {{flyer.owner}}</p>
+            <p>UUID: {{flyer.uuid}}</p>
+            <p>Major: {{flyer.major}}</p>
+            <p>Minor: {{flyer.minor}}</p>
+            <p>Brand: {{flyer.brand}}</p>
+            <p>Date Added: {{flyer.dateAdded}}</p>
+            <p>Located in: {{flyer.location}}</p>
           </div>
 
           <div class="item item-body">
-            <img class="full-image" ng-src="{{flyer.img}}">
+            <img class="full-image" ng-src="{{flyer.image}}">
             <p>
               {{flyer.description}}
             </p>
