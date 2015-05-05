@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 
 var localDB = new PouchDB('beacons');
-var remoteDB = new PouchDB('http://54.149.42.95:5984/beacons');
+var remoteDB = new PouchDB('http://54.149.42.95:5984/beacons', {cache : false});
 
 angular.module('starter', ['ionic', 'starter.controllers'])
 
@@ -21,7 +21,9 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
     cordova.plugins.Keyboard.disableScroll(true);
+
   });
 })
 
@@ -35,14 +37,14 @@ angular.module('starter', ['ionic', 'starter.controllers'])
                     localDB.get(change.id, function(err, doc) {
                         $rootScope.$apply(function() {
                             if (err) console.log(err);
-                            console.log('ADD has been broadcasted')
+                            console.log("ADD broadcast sent")
                             $rootScope.$broadcast('add', doc);
                         })
                     });
                 })
             } else {
                 $rootScope.$apply(function() {
-                    console.log('DELETE has been broadcasted')
+                    console.log("DELETE broadcast sent")
                     $rootScope.$broadcast('delete', change.id);
                 });
             }
