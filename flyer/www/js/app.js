@@ -1,12 +1,13 @@
 // Ionic Starter App
-
+// bruh 
+// fdf
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
 var localDB = new PouchDB('beacons');
-var remoteDB = new PouchDB('http://54.149.42.95:5984/beacons');
+var remoteDB = new PouchDB('http://54.149.42.95:5984/beacons', {cache : false});
 
 angular.module('starter', ['ionic', 'starter.controllers'])
 
@@ -21,7 +22,6 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-
     cordova.plugins.Keyboard.disableScroll(true);
   });
 })
@@ -36,27 +36,25 @@ angular.module('starter', ['ionic', 'starter.controllers'])
                     localDB.get(change.id, function(err, doc) {
                         $rootScope.$apply(function() {
                             if (err) console.log(err);
+                            console.log("ADD broadcast sent")
                             $rootScope.$broadcast('add', doc);
                         })
                     });
                 })
             } else {
                 $rootScope.$apply(function() {
+                    console.log("DELETE broadcast sent")
                     $rootScope.$broadcast('delete', change.id);
                 });
             }
         }
     });
-
     return true;
-
 }])
 
 .config(function($stateProvider, $urlRouterProvider) {
   openFB.init({appId: '1630742683822336'});
-
   $stateProvider
-
   .state('app', {
     url: "/app",
     abstract: true,
