@@ -1,11 +1,99 @@
 angular.module('starter.controllers', ['starter.services'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, Beacon) {
   localDB.sync(remoteDB, {live: true})
-    .on('error', function (err) {
-        console.log("Syncing stopped");
-        console.log(err);
-      });
+  .on('error', function (err) {
+    console.log("Syncing stopped");
+    console.log(err);
+  });
+
+  $scope.phase = 0;
+
+	$scope.major = 0;
+	$scope.minor = 0;
+	$scope.uuid = 0;
+
+	$scope.beaconForm = {};
+
+	$scope.startScanning = function(){
+		$scope.phase = 1;
+		Beacon.setCallback($scope.callback);
+		Beacon.startRanging();
+	};
+
+	$scope.stopScanning = function(){
+		$scope.phase = 0;
+		Beacon.stopRanging();
+	};
+
+	$scope.callback = function(plugin){
+		$scope.$apply(function(){
+			Beacon.stopRanging();
+			$scope.phase = 2;
+			$scope.major = plugin.beacons[0].major;
+			$scope.minor = plugin.beacons[0].minor;
+			$scope.uuid = plugin.beacons[0].uuid;
+		});
+	};
+
+	$scope.foundBeacon = function(){
+		console.log("I am the callback!");
+		Beacon.stopRanging();
+	};
+
+	$scope.helloBeaconScanner = function(){
+		Beacon.setCallback($scope.foundBeacon);
+		Beacon.startRanging();
+	};
+
+	$scope.postCreate1 = function() {
+    $ionicLoading.show({
+	    content: 'Hi. Oh yeah, we are working on your request',
+	    animation: 'fade-in',
+	    showBackdrop: true,
+	    maxWidth: 200,
+	    showDelay: 500,
+      duration: 1000
+	  });
+    localDB.post({
+      title: $scope.beaconForm.title,
+      owner: $scope.beaconForm.owner,
+      uuid: $scope.uuid,
+      major: $scope.major,
+      minor: $scope.minor,
+      dateAdded: $scope.beaconForm.dateAdded,
+      description: $scope.beaconForm.description,
+      location: $scope.beaconForm.location,
+      image: $scope.beaconForm.imageURL,
+      brand: $scope.beaconForm.brand
+    });
+    $scope.closeSmartphoneBeaconOptions();
+    loadingIndicator.hide();
+  };
+
+
+  var deviceInformation = ionic.Platform.platform();
+  var isWebView = ionic.Platform.isWebView();
+  console.log(deviceInformation)
+  console.log(isWebView)
+
+  // Create the Smartphone beacon options modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/beaconScan.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal2 = modal;
+  });
+
+  // Triggered in the Smartphone beacon options modal to close it
+  $scope.closeSmartphoneBeaconOptions = function() {
+    $scope.modal2.hide();
+  };
+
+  // Open the Smartphone beacon options modal
+  $scope.smartPhoneBeaconOptions = function() {
+    $scope.modal2.show();
+  };
 
   // Form data for the login modal
   $scope.loginData = {};
@@ -32,7 +120,6 @@ angular.module('starter.controllers', ['starter.services'])
   };
 
   $scope.postCreate = function() {
-    console.log($scope.beaconForm);
     localDB.post({
       title: $scope.beaconForm.title,
       owner: $scope.beaconForm.owner,
@@ -44,8 +131,7 @@ angular.module('starter.controllers', ['starter.services'])
       oPrice: $scope.beaconForm.oPrice,
       dPrice: $scope.beaconForm.dPrice
     });
-    console.log('complete adding');
-    $scope.closeBeaconOptions();
+
   };
 
   //Cleanup the modal when we're done with it!
