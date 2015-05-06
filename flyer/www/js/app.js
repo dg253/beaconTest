@@ -262,15 +262,3 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/flyers');
 });
-
-/*addBeacon state. now a modal
-.state('app.addBeacon', {
-  url: "/addBeacon",
-  views: {
-    'menuContent': {
-      templateUrl: "templates/beaconScan.html",
-      controller: 'BeaconCtrl'
-    }
-  }
-})
-*/
