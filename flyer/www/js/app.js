@@ -8,9 +8,9 @@
 var localDB = new PouchDB('beacons');
 var remoteDB = new PouchDB('http://54.149.42.95:5984/beacons');
 
-angular.module('starter', ['ionic', 'starter.controllers','starter.beacons'])
+angular.module('starter', ['ionic', 'starter.controllers'])
 
-.run(function($ionicPlatform) {
+.run(function(Beacon, $ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -23,6 +23,8 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.beacons'])
     }
 
     cordova.plugins.Keyboard.disableScroll(true);
+
+    Beacon.init();
   });
 })
 
@@ -52,6 +54,142 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.beacons'])
 
 }])
 
+.factory('Beacon', function($rootScope){
+	var beacon = {};
+
+	beacon.beaconRegion = null;
+	beacon.delegate = null;
+
+	beacon.uuid = "2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6";
+	beacon.identifier = "flyer";
+	beacon.major = 1;
+	beacon.minor = 1;
+
+	//------------------------------------------------------
+
+	beacon.callback = function(){
+		console.log("No callback defined!");
+	};
+
+	beacon.setCallback = function(cb){
+		beacon.callback = cb;
+	};
+
+	//------------------------------------------------------
+
+	beacon.init = function(){
+		beacon.delegate = new cordova.plugins.locationManager.Delegate();
+
+		beacon.delegate.didRangeBeaconsInRegion = function(pluginResult){
+			beacon.didRangeBeaconsInRegion(pluginResult);
+		};
+
+		beacon.delegate.didEnterRegion = function(pluginResult){
+			beacon.didEnterRegion(pluginResult);
+		};
+
+		beacon.delegate.didExitRegion = function(pluginResult){
+			beacon.didExitRegion(pluginResult);
+		};
+
+		beacon.delegate.didDetermineStateForRegion = function(pluginResult){
+			beacon.didDetermineStateForRegion(pluginResult);
+		};
+	};
+
+	beacon.helloWorld = function(){
+		console.log("HELLO WORLD! It\'s me, Beacon Scanner! :)");
+	};
+
+	//------------------------------------------------------
+
+	beacon.startRanging = function(plugin){
+		var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(beacon.identifier,beacon.uuid);
+		cordova.plugins.locationManager.setDelegate(beacon.delegate);
+		//For iOS 8+ punks
+		cordova.plugins.locationManager.requestWhenInUseAuthorization();
+
+		cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
+		  .fail(console.error)
+		  .done();
+
+		  console.log("I\'m looking for: " + beacon.uuid);
+	};
+
+	beacon.stopRanging = function(plugin){
+		var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(beacon.identifier,beacon.uuid,beacon.major,beacon.minor);
+
+		cordova.plugins.locationManager.stopRangingBeaconsInRegion(beaconRegion)
+		  .fail(console.error)
+		  .done();
+
+		  console.log("I stopped ranging for beacons.");
+	};
+
+	//------------------------------------------------------
+
+	beacon.getStatus = function(){
+		return beacon.status;
+	};
+
+	//------------------------------------------------------
+
+	beacon.didEnterRegion = function(plugin){
+		console.log("Hello, from beacon!");
+	};
+
+	beacon.didExitRegion = function(plugin){
+		console.log("Goodbye, from beacon!");
+	};
+
+	beacon.didRangeBeaconsInRegion = function(plugin){
+		console.log(JSON.stringify(plugin));
+		for(b in plugin.beacons){
+			if(beacon.processBeacon(plugin.beacons[b])){
+				console.log("Found it!");
+				beacon.callback(plugin);
+			}
+		}
+	};
+
+	beacon.didDetermineStateForRegion = function(plugin){
+		console.log("Which event was this again...?");
+	};
+
+	//------------------------------------------------------
+
+	beacon.processBeacon = function(b){
+		/*
+		 * We know that most likely we are only searching for a very specific beacon, so just grab
+		 * the first one found with an immediate proximity
+		 */
+
+		console.log("I AM BEACON " + JSON.stringify(b));
+
+		if(b.proximity == "ProximityImmediate"){
+			return true;
+		}
+
+		return false;
+	};
+
+	//------------------------------------------------------
+
+	beacon.setUUID = function(uuid){
+		beacon.uuid = uuid;
+	};
+
+	beacon.setMajor = function(major){
+		beacon.major = major;
+	};
+
+	beacon.setMinor = function(minor){
+		beacon.minor = minor;
+	};
+
+	return beacon;
+})
+
 .config(function($stateProvider, $urlRouterProvider) {
   openFB.init({appId: '1630742683822336'});
 
@@ -71,16 +209,6 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.beacons'])
         templateUrl: "templates/search.html"
       }
     }
-  })
-
-  .state('app.addBeacon', {
-  	url: "/addBeacon",
-  	views: {
-  		'menuContent': {
-  			templateUrl: "templates/beaconScan.html",
-  			controller: 'BeaconCtrl'
-  		}
-  	}
   })
 
   .state('app.browse', {
@@ -134,3 +262,15 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.beacons'])
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/flyers');
 });
+
+/*addBeacon state. now a modal
+.state('app.addBeacon', {
+  url: "/addBeacon",
+  views: {
+    'menuContent': {
+      templateUrl: "templates/beaconScan.html",
+      controller: 'BeaconCtrl'
+    }
+  }
+})
+*/
