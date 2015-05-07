@@ -84,7 +84,7 @@ angular.module('starter.controllers', ['starter.services'])
 
   var deviceInformation = ionic.Platform.platform();
   console.log(deviceInformation)
-  
+
   var isWebView = ionic.Platform.isWebView();
   console.log(isWebView)
   var isIPad = ionic.Platform.isIPad();
@@ -98,6 +98,24 @@ angular.module('starter.controllers', ['starter.services'])
 
   var currentPlatform = ionic.Platform.platform();
   console.log(currentPlatform)
+
+  // Create the Smartphone beacon options modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/beaconScan.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal2 = modal;
+  });
+
+  // Triggered in the Smartphone beacon options modal to close it
+  $scope.closeSmartphoneBeaconOptions = function() {
+    $scope.modal2.hide();
+  };
+
+  // Open the Smartphone beacon options modal
+  $scope.smartPhoneBeaconOptions = function() {
+    $scope.modal2.show();
+  };
 
   // Form data for the login modal
   $scope.loginData = {};
