@@ -23,6 +23,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       StatusBar.styleDefault();
     }
     cordova.plugins.Keyboard.disableScroll(true);
+    Beacon.init();
   });
 })
 
