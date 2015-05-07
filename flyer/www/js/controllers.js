@@ -56,6 +56,31 @@ angular.module('starter.controllers', ['starter.services'])
 		Beacon.setCallback($scope.foundBeacon);
 		Beacon.startRanging();
 	};
+
+  $scope.postCreate1 = function() {
+    $ionicLoading.show({
+	    content: 'Hi. Oh yeah, we are working on your request',
+	    animation: 'fade-in',
+	    showBackdrop: true,
+	    maxWidth: 200,
+	    showDelay: 500,
+      duration: 1000
+	  });
+    localDB.post({
+      title: $scope.beaconForm.title,
+      owner: $scope.beaconForm.owner,
+      uuid: $scope.uuid,
+      major: $scope.major,
+      minor: $scope.minor,
+      dateAdded: $scope.beaconForm.dateAdded,
+      description: $scope.beaconForm.description,
+      location: $scope.beaconForm.location,
+      image: $scope.beaconForm.imageURL,
+      brand: $scope.beaconForm.brand
+    });
+    $scope.closeSmartphoneBeaconOptions();
+    loadingIndicator.hide();
+  };
   
   // Form data for the login modal
   $scope.loginData = {};
