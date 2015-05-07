@@ -82,22 +82,22 @@ angular.module('starter.controllers', ['starter.services'])
     loadingIndicator.hide();
   };
 
-  var deviceInformation = ionic.Platform.platform();
+  $scope.deviceInformation = ionic.Platform.platform();
   console.log(deviceInformation)
 
-  var isWebView = ionic.Platform.isWebView();
-  console.log(isWebView)
-  var isIPad = ionic.Platform.isIPad();
-  console.log(isIPad)
-  var isIOS = ionic.Platform.isIOS();
-  console.log(isIOS)
-  var isAndroid = ionic.Platform.isAndroid();
-  console.log(isAndroid)
-  var isWindowsPhone = ionic.Platform.isWindowsPhone();
-  console.log(isWindowsPhone)
+  $scope.isWebView = ionic.Platform.isWebView();
+  console.log($scope.isWebView)
+  $scope.isIPad = ionic.Platform.isIPad();
+  console.log($scope.isIPad)
+  $scope.isIOS = ionic.Platform.isIOS();
+  console.log($scope.isIOS)
+  $scope.isAndroid = ionic.Platform.isAndroid();
+  console.log($scope.isAndroid)
+  $scope.isWindowsPhone = ionic.Platform.isWindowsPhone();
+  console.log($scope.isWindowsPhone)
 
-  var currentPlatform = ionic.Platform.platform();
-  console.log(currentPlatform)
+  $scope.currentPlatform = ionic.Platform.platform();
+  console.log($scope.currentPlatform)
 
   // Create the Smartphone beacon options modal that we will use later
   $ionicModal.fromTemplateUrl('templates/beaconScan.html', {
