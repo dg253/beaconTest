@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['starter.services'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, Beacon) {
 
   localDB.sync(remoteDB, {live: true, retry: true})
     .on('error', function (err) {
