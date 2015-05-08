@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['starter.services'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, Beacon) {
 
   localDB.sync(remoteDB, {live: true, retry: true})
     .on('error', function (err) {
@@ -17,11 +17,145 @@ angular.module('starter.controllers', ['starter.services'])
         console.log("User denied in AppCtrl");
         console.log(info);
     });
+
+  $scope.phase = 0;
+
+	$scope.major = 0;
+	$scope.minor = 0;
+	$scope.uuid = 'blank';
+	$scope.lat = 0;
+	$scope.lon = 0;
+
+	$scope.beaconForm = {};
+
+	$scope.startScanning = function(){
+		$scope.phase = 1;
+		Beacon.setCallback($scope.callback);
+		Beacon.startRanging();
+		
+		//Let's get those coordinates
+		navigator.geolocation.getCurrentPosition($scope.geoSuccess,$scope.geoFailure);
+	};
+
+	$scope.geoSuccess = function(position){
+		console.log("You got it!");
+		console.log("LAT: " + position.coords.latitude);
+		console.log("LONG: " + position.coords.longitude);
+		$scope.lat = position.coords.latitude;
+		$scope.lon = position.coords.longitude;
+	};
+	
+	$scope.geoFailure = function(error){
+		console.log("Geolocation error");
+		console.log("CODE: " + error.code);
+		console.log("MESSAGE: " + error.message);
+	};
+
+	$scope.stopScanning = function(){
+		$scope.phase = 0;
+		Beacon.stopRanging();
+	};
+
+	$scope.callback = function(plugin){
+		$scope.$apply(function(){
+			Beacon.stopRanging();
+			$scope.phase = 2;
+			$scope.major = plugin.beacons[0].major;
+			$scope.minor = plugin.beacons[0].minor;
+			$scope.uuid = String(plugin.beacons[0].uuid);
+		});
+	};
+
+	$scope.foundBeacon = function(){
+		console.log("I am the callback!");
+		Beacon.stopRanging();
+	};
+
+	$scope.helloBeaconScanner = function(){
+		Beacon.setCallback($scope.foundBeacon);
+		Beacon.startRanging();
+	};
+
+  $scope.postCreate1 = function() {
+    $ionicLoading.show({
+	    content: 'Hi. Oh yeah, we are working on your request',
+	    animation: 'fade-in',
+	    showBackdrop: true,
+	    maxWidth: 200,
+	    showDelay: 500,
+      duration: 1000
+	  });
+    localDB.post({
+      title: $scope.beaconForm.title,
+      owner: $scope.beaconForm.owner,
+      uuid: $scope.uuid,
+      major: $scope.major,
+      minor: $scope.minor,
+      dateAdded: $scope.beaconForm.dateAdded = new Date(),
+      description: $scope.beaconForm.description,
+      lat: $scope.lat,
+      lon: $scope.lon,
+      image: $scope.beaconForm.imageURL,
+      brand: $scope.beaconForm.brand
+    });
+    $scope.closeSmartphoneBeaconOptions();
+    loadingIndicator.hide();
+    $scope.lat = 0;
+    $scope.lon = 0;
+    $scope.uuid = "blank";
+    $scope.phase = 0;
+  };
+
+  $scope.deviceInformation = ionic.Platform.platform();
+  console.log('deviceInformation?')
+  console.log($scope.deviceInformation)
+
+  $scope.isWebView = ionic.Platform.isWebView();
+  console.log('isWebView?')
+  console.log($scope.isWebView)
+  $scope.isIPad = ionic.Platform.isIPad();
+  console.log('isIPad?')
+  console.log($scope.isIPad)
+  $scope.isIOS = ionic.Platform.isIOS();
+  console.log('isIOS?')
+  console.log($scope.isIOS)
+  $scope.isAndroid = ionic.Platform.isAndroid();
+  console.log('isAndroid?')
+  console.log($scope.isAndroid)
+  $scope.isWindowsPhone = ionic.Platform.isWindowsPhone();
+  console.log('isWindowsPhone?')
+  console.log($scope.isWindowsPhone)
+
+  $scope.currentPlatform = ionic.Platform.platform();
+  console.log('currentPlatform?')
+  console.log($scope.currentPlatform)
+
+  $scope.isMobile = $scope.isIOS || $scope.isAndroid
+  console.log('isMobile?')
+  console.log($scope.isMobile)
+
+  // Create the Smartphone beacon options modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/beaconScan.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal2 = modal;
+  });
+
+  // Triggered in the Smartphone beacon options modal to close it
+  $scope.closeSmartphoneBeaconOptions = function() {
+    $scope.modal2.hide();
+  };
+
+  // Open the Smartphone beacon options modal
+  $scope.smartPhoneBeaconOptions = function() {
+    $scope.modal2.show();
+  };
+
   // Form data for the login modal
   $scope.loginData = {};
 
   $scope.beaconForm = {};
-  $scope.beaconForm.dateAdded = new Date();
 
   // Create the beacon options modal that we will use later
   $ionicModal.fromTemplateUrl('templates/browse.html', {
@@ -42,20 +176,29 @@ angular.module('starter.controllers', ['starter.services'])
   };
 
   $scope.postCreate = function() {
+    $ionicLoading.show({
+	    content: 'Hi. Oh yeah, we are working on your request',
+	    animation: 'fade-in',
+	    showBackdrop: true,
+	    maxWidth: 200,
+	    showDelay: 500,
+      duration: 1300
+	  });
     localDB.post({
       title: $scope.beaconForm.title,
       owner: $scope.beaconForm.owner,
       uuid: $scope.beaconForm.uuid,
       major: $scope.beaconForm.major,
       minor: $scope.beaconForm.minor,
-      dateAdded: $scope.beaconForm.dateAdded,
+      dateAdded: $scope.beaconForm.dateAdded = new Date(),
       description: $scope.beaconForm.description,
       location: $scope.beaconForm.location,
       image: $scope.beaconForm.imageURL,
       brand: $scope.beaconForm.brand
     });
-    console.log('succesful post of:');
+
     $scope.closeBeaconOptions();
+    loadingIndicator.hide();
   };
 
   //Cleanup the modal when we're done with it!
@@ -116,6 +259,13 @@ angular.module('starter.controllers', ['starter.services'])
         },
         {scope: 'email'});
   };
+
+  $scope.delete = function(flyer) {
+    localDB.get(flyer._id, function (err, doc) {
+      localDB.remove(doc, function (err, res) {});
+    });
+  };
+
 })
 
 .controller('FlyersCtrl', function($scope, FlyerService, PouchDBListener) {
@@ -132,24 +282,46 @@ angular.module('starter.controllers', ['starter.services'])
     $scope.flyers = FlyerService.getFlyers();
 
     $scope.$on('add', function(event, flyer) {
-      console.log('a ADD caught')
-      FlyerService.addFlyer(flyer);
+      for (var i = 0; i < $scope.flyers.length; i++) {
+        if ($scope.flyers[i]._id === flyer._id) {
+          console.log('on add received UPDATE')
+          return FlyerService.updateFlyer(flyer, i);
+        }
+      }
+      console.log('on add received ADD')
+      return FlyerService.addFlyer(flyer);
     });
 
     $scope.$on('delete', function(event, id) {
       console.log('a DELETE caught')
-      FlyerService.deleteFlyer(id);
+      return FlyerService.deleteFlyer(id);
     });
-
-    $scope.delete = function(task) {
-      localDB.get(task._id, function (err, doc) {
-        localDB.remove(doc, function (err, res) {});
-      });
-    };
 })
 
 .controller('FlyerCtrl', function($scope, FlyerService, $stateParams) {
     $scope.flyer = FlyerService.getFlyer($stateParams.flyerId)
+    $scope.flyerCopy = angular.copy($scope.flyer)
+
+    $scope.editForm = false;
+
+    $scope.toggleForm = function() {
+      $scope.editForm = !$scope.editForm;
+    };
+
+    $scope.update = function(flyer) {
+      //$scope.flyer = angular.copy(flyer)
+      localDB.get(flyer._id, function (err, doc) {
+        if (err) {
+          console.log(err);
+        } else {
+          localDB.put(flyer, doc._rev, function (err, res) {
+            console.log('sent doc update');
+            $scope.toggleForm();
+            if (err) console.log(err);
+          });
+        }
+      });
+    };
 })
 
 .controller('LocalCtrl', function($scope) {

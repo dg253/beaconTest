@@ -3,6 +3,7 @@ body {
   cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }
 
+
 .center{
   display: -webkit-box;
     display: -moz-box;
@@ -38,4 +39,9 @@ body {
 .spinner svg{
 	width:150px;
 	height:150px;
+
+.show-hide {
+  -webkit-transition:all linear 0.5s;
+  transition:all linear 0.5s;
+
 }

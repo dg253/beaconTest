@@ -1,11 +1,11 @@
 <ion-view title="Beacon Detail">
     <ion-nav-buttons side="right">
-        <button class="button button-clear">Edit</button>
+        <button class="button button-clear" ng-show="editForm == false" ng-click="toggleForm()">Edit</button>
+        <button class="button button-clear" ng-show="editForm == true" ng-click="toggleForm()">Cancel</button>
     </ion-nav-buttons>
 </div>
     <ion-content class="has-header">
-        <div class="list card">
-
+        <div class="list card" ng-hide="editForm == true">
           <div class="item item-avatar">
             <img src="{{flyer.img}}">
             <h2>{{flyer.title}}</h2>
@@ -23,8 +23,55 @@
             <p>
               {{flyer.description}}
             </p>
+          </div>
+        </div>
 
+        <div class="list list-inset show-hide" ng-show="editForm == true">
+          <form ng-submit="update(flyerCopy)">
+          <label class="item item-input">
+            <span class="input-label">Title</span>
+            <input type="text" ng-model="flyerCopy.title" value="flyerCopy.title">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Owner</span>
+            <input type="text" ng-model="flyerCopy.owner" value="flyerCopy.Owner">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">UUID</span>
+            <input type="text" ng-model="flyerCopy.uuid" value="flyerCopy.UUID">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Major</span>
+            <input type="number" ng-model="flyerCopy.major" value="flyerCopy.Major">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Minor</span>
+            <input type="number" ng-model="flyerCopy.minor" value="flyerCopy.Minor">
+          </label>
+          <input type="hidden" ng-model="flyerCopy.dateAdded">
+          <label class="item item-input item-label">
+            <span class="input-label">Description</span>
+            <textarea rows="3" ng-model="flyerCopy.description" value="flyerCopy.Description"></textarea>
+          </label>
+
+          <label class="item item-input item-label">
+            <span class="input-label">Location</span>
+            <input type="text" ng-model="flyerCopy.location" value="flyerCopy.Location">
+          </label>
+          <label class="item item-input item-select">
+            <div class="input-label">Brand
             </div>
+            <select ng-model="flyerCopy.brand">
+              <option>Rad Beacon</option>
+              <option selected>Estimote</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <br>
+          <button class="button button-block button-balanced">
+            <input type="submit"></input>
+          </button>
+          </form>
         </div>
     </ion-content>
 </ion-view>

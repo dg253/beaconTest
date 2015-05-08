@@ -4,8 +4,13 @@ angular.module('starter.services', ['ngResource'])
     var flyers1 = [];
 
     var addFlyer = function(flyer) {
-      console.log('confirmed push')
       flyers1.push(flyer)
+      console.log('confirmed push')
+    }
+
+    var updateFlyer = function(flyer, i) {
+      flyers1[i] = flyer;
+      console.log('confirmed update')
     }
 
     var deleteFlyer = function(id){
@@ -33,6 +38,7 @@ angular.module('starter.services', ['ngResource'])
 
     return {
       addFlyer: addFlyer,
+      updateFlyer: updateFlyer,
       deleteFlyer: deleteFlyer,
       getFlyers: getFlyers,
       getFlyer: getFlyer
