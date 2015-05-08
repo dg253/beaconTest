@@ -9,7 +9,7 @@
 var localDB = new PouchDB('beacons');
 var remoteDB = new PouchDB('http://54.149.42.95:5984/beacons', {cache : false});
 
-angular.module('starter', ['ionic', 'starter.controllers','starter.beacons'])
+angular.module('starter', ['ionic', 'starter.controllers'])
 
 .run(function(Beacon, $ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -83,6 +83,7 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.beacons'])
 
 		beacon.delegate.didRangeBeaconsInRegion = function(pluginResult){
       beacon.didRangeBeaconsInRegion(pluginResult);
+
 		};
 
 		beacon.delegate.didEnterRegion = function(pluginResult){
@@ -125,12 +126,17 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.beacons'])
 		  .fail(console.error)
 		  .done();
 
-		  console.log("I stopped monitoring for beacons.");
+
+		  console.log("I stopped ranging for beacons.");
 	};
+
+	//------------------------------------------------------
 
 	beacon.getStatus = function(){
 		return beacon.status;
 	};
+
+	//------------------------------------------------------
 
 	beacon.didEnterRegion = function(plugin){
 		console.log("Hello, from beacon!");
@@ -205,16 +211,6 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.beacons'])
         templateUrl: "templates/search.html"
       }
     }
-  })
-
-  .state('app.addBeacon', {
-  	url: "/addBeacon",
-  	views: {
-  		'menuContent': {
-  			templateUrl: "templates/beaconScan.html",
-  			controller: 'BeaconCtrl'
-  		}
-  	}
   })
 
   .state('app.browse', {

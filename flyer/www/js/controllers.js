@@ -22,6 +22,7 @@ angular.module('starter.controllers', ['starter.services'])
 
 	$scope.major = 0;
 	$scope.minor = 0;
+
 	$scope.uuid = 'blank';
 	$scope.lat = 0;
 	$scope.lon = 0;
@@ -32,6 +33,7 @@ angular.module('starter.controllers', ['starter.services'])
 		$scope.phase = 1;
 		Beacon.setCallback($scope.callback);
 		Beacon.startRanging();
+
 		
 		//Let's get those coordinates
 		navigator.geolocation.getCurrentPosition($scope.geoSuccess,$scope.geoFailure);
@@ -49,6 +51,7 @@ angular.module('starter.controllers', ['starter.services'])
 		console.log("Geolocation error");
 		console.log("CODE: " + error.code);
 		console.log("MESSAGE: " + error.message);
+
 	};
 
 	$scope.stopScanning = function(){
@@ -62,7 +65,7 @@ angular.module('starter.controllers', ['starter.services'])
 			$scope.phase = 2;
 			$scope.major = plugin.beacons[0].major;
 			$scope.minor = plugin.beacons[0].minor;
-			$scope.uuid = String(plugin.beacons[0].uuid);
+			$scope.uuid = plugin.beacons[0].uuid;
 		});
 	};
 
@@ -76,7 +79,7 @@ angular.module('starter.controllers', ['starter.services'])
 		Beacon.startRanging();
 	};
 
-  $scope.postCreate1 = function() {
+	$scope.postCreate1 = function() {
     $ionicLoading.show({
 	    content: 'Hi. Oh yeah, we are working on your request',
 	    animation: 'fade-in',
@@ -134,6 +137,7 @@ angular.module('starter.controllers', ['starter.services'])
   console.log('isMobile?')
   console.log($scope.isMobile)
 
+
   // Create the Smartphone beacon options modal that we will use later
   $ionicModal.fromTemplateUrl('templates/beaconScan.html', {
     scope: $scope,
@@ -176,6 +180,7 @@ angular.module('starter.controllers', ['starter.services'])
   };
 
   $scope.postCreate = function() {
+
     $ionicLoading.show({
 	    content: 'Hi. Oh yeah, we are working on your request',
 	    animation: 'fade-in',
@@ -184,6 +189,7 @@ angular.module('starter.controllers', ['starter.services'])
 	    showDelay: 500,
       duration: 1300
 	  });
+
     localDB.post({
       title: $scope.beaconForm.title,
       owner: $scope.beaconForm.owner,
@@ -199,6 +205,7 @@ angular.module('starter.controllers', ['starter.services'])
 
     $scope.closeBeaconOptions();
     loadingIndicator.hide();
+
   };
 
   //Cleanup the modal when we're done with it!
@@ -299,8 +306,8 @@ angular.module('starter.controllers', ['starter.services'])
 })
 
 .controller('FlyerCtrl', function($scope, FlyerService, $stateParams) {
-    $scope.flyer = FlyerService.getFlyer($stateParams.flyerId)
-    $scope.flyerCopy = angular.copy($scope.flyer)
+    $scope.flyer = FlyerService.getFlyer($stateParams.flyerId);
+    $scope.flyerCopy = angular.copy($scope.flyer);
 
     $scope.editForm = false;
 

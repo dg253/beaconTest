@@ -1,3 +1,4 @@
+
 var localDB = new PouchDB('beacons');
 
 angular.module('starter.beacons', ['ionic'])
@@ -228,3 +229,4 @@ angular.module('starter.beacons', ['ionic'])
   	};
 
 });
+
