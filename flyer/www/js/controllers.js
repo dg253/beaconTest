@@ -54,8 +54,8 @@ angular.module('starter.controllers', ['starter.services'])
       image: $scope.beaconForm.imageURL,
       brand: $scope.beaconForm.brand
     });
-    console.log('succesful post of:')
-    $scope.closeBeaconOptions()
+    console.log('succesful post of:');
+    $scope.closeBeaconOptions();
   };
 
   //Cleanup the modal when we're done with it!
@@ -203,4 +203,4 @@ angular.module('starter.controllers', ['starter.services'])
             alert('Facebook error: ' + error.error_description);
         }
     });
-})
+});
