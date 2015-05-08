@@ -23,6 +23,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       StatusBar.styleDefault();
     }
     cordova.plugins.Keyboard.disableScroll(true);
+
     Beacon.init();
   });
 })
@@ -31,20 +32,19 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   localDB.changes({
         live: true,
         continuous: true,
+        include_docs: true,
         onChange: function(change) {
             if (!change.deleted) {
                 $rootScope.$apply(function() {
                     localDB.get(change.id, function(err, doc) {
                         $rootScope.$apply(function() {
                             if (err) console.log(err);
-                            console.log("ADD broadcast sent")
                             $rootScope.$broadcast('add', doc);
                         })
                     });
                 })
             } else {
                 $rootScope.$apply(function() {
-                    console.log("DELETE broadcast sent")
                     $rootScope.$broadcast('delete', change.id);
                 });
             }
@@ -80,7 +80,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 		beacon.delegate = new cordova.plugins.locationManager.Delegate();
 
 		beacon.delegate.didRangeBeaconsInRegion = function(pluginResult){
-			beacon.didRangeBeaconsInRegion(pluginResult);
+      beacon.didRangeBeaconsInRegion(pluginResult);
 		};
 
 		beacon.delegate.didEnterRegion = function(pluginResult){
@@ -106,7 +106,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 		var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(beacon.identifier,beacon.uuid);
 		cordova.plugins.locationManager.setDelegate(beacon.delegate);
 		//For iOS 8+ punks
-		cordova.plugins.locationManager.requestWhenInUseAuthorization();
+		//cordova.plugins.locationManager.requestWhenInUseAuthorization();
+    cordova.plugins.locationManager.requestAlwaysAuthorization();
 
 		cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
 		  .fail(console.error)
@@ -122,16 +123,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 		  .fail(console.error)
 		  .done();
 
-		  console.log("I stopped ranging for beacons.");
+		  console.log("I stopped monitoring for beacons.");
 	};
-
-	//------------------------------------------------------
 
 	beacon.getStatus = function(){
 		return beacon.status;
 	};
-
-	//------------------------------------------------------
 
 	beacon.didEnterRegion = function(plugin){
 		console.log("Hello, from beacon!");
