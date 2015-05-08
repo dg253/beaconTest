@@ -36,14 +36,14 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.beacons'])
                     localDB.get(change.id, function(err, doc) {
                         $rootScope.$apply(function() {
                             if (err) console.log(err);
-                            console.log("ADD broadcast sent")
+                            console.log("ADD broadcast sent");
                             $rootScope.$broadcast('add', doc);
-                        })
+                        });
                     });
-                })
+                });
             } else {
                 $rootScope.$apply(function() {
-                    console.log("DELETE broadcast sent")
+                    console.log("DELETE broadcast sent");
                     $rootScope.$broadcast('delete', change.id);
                 });
             }
