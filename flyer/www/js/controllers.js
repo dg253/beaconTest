@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['starter.services'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, Beacon) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, Beacon) {
 
   localDB.sync(remoteDB, {live: true, retry: true})
     .on('error', function (err) {
@@ -22,7 +22,7 @@ angular.module('starter.controllers', ['starter.services'])
 
 	$scope.major = 0;
 	$scope.minor = 0;
-	$scope.uuid = 0;
+	$scope.uuid = 'blank';
 
 	$scope.beaconForm = {};
 
@@ -43,7 +43,7 @@ angular.module('starter.controllers', ['starter.services'])
 			$scope.phase = 2;
 			$scope.major = plugin.beacons[0].major;
 			$scope.minor = plugin.beacons[0].minor;
-			$scope.uuid = plugin.beacons[0].uuid;
+			$scope.uuid = String(plugin.beacons[0].uuid);
 		});
 	};
 
@@ -72,7 +72,7 @@ angular.module('starter.controllers', ['starter.services'])
       uuid: $scope.uuid,
       major: $scope.major,
       minor: $scope.minor,
-      dateAdded: $scope.beaconForm.dateAdded,
+      dateAdded: $scope.beaconForm.dateAdded = new Date(),
       description: $scope.beaconForm.description,
       location: $scope.beaconForm.location,
       image: $scope.beaconForm.imageURL,
@@ -132,7 +132,6 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.loginData = {};
 
   $scope.beaconForm = {};
-  $scope.beaconForm.dateAdded = new Date();
 
   // Create the beacon options modal that we will use later
   $ionicModal.fromTemplateUrl('templates/browse.html', {
@@ -153,20 +152,28 @@ angular.module('starter.controllers', ['starter.services'])
   };
 
   $scope.postCreate = function() {
+    $ionicLoading.show({
+	    content: 'Hi. Oh yeah, we are working on your request',
+	    animation: 'fade-in',
+	    showBackdrop: true,
+	    maxWidth: 200,
+	    showDelay: 500,
+      duration: 1300
+	  });
     localDB.post({
       title: $scope.beaconForm.title,
       owner: $scope.beaconForm.owner,
       uuid: $scope.beaconForm.uuid,
       major: $scope.beaconForm.major,
       minor: $scope.beaconForm.minor,
-      dateAdded: $scope.beaconForm.dateAdded,
+      dateAdded: $scope.beaconForm.dateAdded = new Date(),
       description: $scope.beaconForm.description,
       location: $scope.beaconForm.location,
       image: $scope.beaconForm.imageURL,
       brand: $scope.beaconForm.brand
     });
-    console.log('succesful post of:')
     $scope.closeBeaconOptions()
+    loadingIndicator.hide();
   };
 
   //Cleanup the modal when we're done with it!
@@ -227,6 +234,13 @@ angular.module('starter.controllers', ['starter.services'])
         },
         {scope: 'email'});
   };
+
+  $scope.delete = function(flyer) {
+    localDB.get(flyer._id, function (err, doc) {
+      localDB.remove(doc, function (err, res) {});
+    });
+  };
+
 })
 
 .controller('FlyersCtrl', function($scope, FlyerService, PouchDBListener) {
@@ -243,24 +257,46 @@ angular.module('starter.controllers', ['starter.services'])
     $scope.flyers = FlyerService.getFlyers();
 
     $scope.$on('add', function(event, flyer) {
-      console.log('a ADD caught')
-      FlyerService.addFlyer(flyer);
+      for (var i = 0; i < $scope.flyers.length; i++) {
+        if ($scope.flyers[i]._id === flyer._id) {
+          console.log('on add received UPDATE')
+          return FlyerService.updateFlyer(flyer, i);
+        }
+      }
+      console.log('on add received ADD')
+      return FlyerService.addFlyer(flyer);
     });
 
     $scope.$on('delete', function(event, id) {
       console.log('a DELETE caught')
-      FlyerService.deleteFlyer(id);
+      return FlyerService.deleteFlyer(id);
     });
-
-    $scope.delete = function(task) {
-      localDB.get(task._id, function (err, doc) {
-        localDB.remove(doc, function (err, res) {});
-      });
-    };
 })
 
 .controller('FlyerCtrl', function($scope, FlyerService, $stateParams) {
     $scope.flyer = FlyerService.getFlyer($stateParams.flyerId)
+    $scope.flyerCopy = angular.copy($scope.flyer)
+
+    $scope.editForm = false;
+
+    $scope.toggleForm = function() {
+      $scope.editForm = !$scope.editForm;
+    };
+
+    $scope.update = function(flyer) {
+      //$scope.flyer = angular.copy(flyer)
+      localDB.get(flyer._id, function (err, doc) {
+        if (err) {
+          console.log(err);
+        } else {
+          localDB.put(flyer, doc._rev, function (err, res) {
+            console.log('sent doc update');
+            $scope.toggleForm();
+            if (err) console.log(err);
+          });
+        }
+      });
+    };
 })
 
 .controller('LocalCtrl', function($scope) {
