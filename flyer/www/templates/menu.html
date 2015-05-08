@@ -48,7 +48,10 @@
 
       <ion-content>
         <ion-list>
-          <ion-item class="item-icon-left" nav-clear menu-close ng-click="beaconOptions()">
+          <ion-item ng-show="isMobile" class="item-icon-left" nav-clear menu-close ng-click="smartPhoneBeaconOptions()">
+            <i class="icon ion-plus-round"></i>Add A Beacon
+          </ion-item>
+          <ion-item ng-show="!isMobile" class="item-icon-left" nav-clear menu-close ng-click="beaconOptions()">
             <i class="icon ion-plus-round"></i>Add A Beacon
           </ion-item>
           <ion-item class="item-icon-left" nav-clear menu-close ng-click="#">
