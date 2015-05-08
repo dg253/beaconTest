@@ -1,0 +1,14 @@
+CACHE MANIFEST
+# 2014-05-7 v1.0.0
+/css/*
+/img/*
+/js/*
+/lib/*
+/templates/*
+/index.html
+logoutcallback.html
+oauthcallback.html
+config.xml
+
+NETWORK:
+/resources
