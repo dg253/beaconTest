@@ -3,6 +3,7 @@
 
 node_modules/
 platforms/
+plugins/
 plugins/ios
 plugins/android
 plugins/firefoxos
