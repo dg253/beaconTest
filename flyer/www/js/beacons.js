@@ -153,6 +153,8 @@ angular.module('starter.beacons', ['ionic'])
 	$scope.major = 0;
 	$scope.minor = 0;
 	$scope.uuid = 0;
+	$scope.lat = 0;
+	$scope.lon = 0;
 	
 	$scope.beaconForm = {};
 	
@@ -160,6 +162,24 @@ angular.module('starter.beacons', ['ionic'])
 		$scope.phase = 1;
 		Beacon.setCallback($scope.callback);
 		Beacon.startRanging();
+		
+		//Let's get those coordinates
+		navigator.geolocation.getCurrentPosition($scope.geoSuccess,$scope.geoFailure);
+		
+	};
+	
+	$scope.geoSuccess = function(position){
+		console.log("You got it!");
+		console.log("LAT: " + position.coords.latitude);
+		console.log("LONG: " + position.coords.longitude);
+		$scope.lat = position.coords.latitude;
+		$scope.lon = position.coords.longitude;
+	};
+	
+	$scope.geoFailure = function(error){
+		console.log("Geolocation error");
+		console.log("CODE: " + error.code);
+		console.log("MESSAGE: " + error.message);
 	};
 	
 	$scope.stopScanning = function(){
@@ -197,7 +217,8 @@ angular.module('starter.beacons', ['ionic'])
       minor: $scope.minor,
       dateAdded: $scope.beaconForm.dateAdded,
       description: $scope.beaconForm.description,
-      location: $scope.beaconForm.location,
+      lat: $scope.lat,
+      lon: $scope.lon,
       image: $scope.beaconForm.imageURL,
       brand: $scope.beaconForm.brand,
       oPrice: $scope.beaconForm.oPrice,
