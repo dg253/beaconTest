@@ -7282,9 +7282,6 @@ a.button {
 .full-image {
   width: 100%; }
 
-.half-image {
-    width: 50%; }
-
 .clearfix {
   *zoom: 1; }
   .clearfix:before, .clearfix:after {
